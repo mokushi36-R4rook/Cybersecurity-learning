@@ -1,47 +1,41 @@
-# TryHackMe Learning Log
+# #  今日の学び Coursera / Today’s Learning in coursera
 
-## 2025-09-09: Security Jobs & Networking Basics
-
----
-
-### 理解できたこと (What I Learned)
-
-#### セキュリティ分野の仕事
-- セキュリティアナリストは監視・検知・分析を行い、インシデントの初動対応を担う。  
-- 断片的な情報から全体像を推測する力が求められる。  
-
-**English**
-- Security analysts monitor, detect, and analyze threats, taking the first response in incident handling.  
-- They need the ability to reconstruct the bigger picture from fragmented information.  
+## DoS攻撃 (Denial of Service attack)  
+- **目的**: サービスを利用不能にする  
+- **方法**: 単一の攻撃元から大量のリクエストやデータを送りつけ、サーバーやネットワークを過負荷にさせる  
+- **代表例**:  
+  - SYN Flood: TCP接続の初期ハンドシェイクを悪用  
+  - ICMP Flood (Ping Flood): pingを大量に送信  
+  - Ping of Death: 異常に大きなパケットでシステムをクラッシュさせる  
 
 ---
 
-#### ネットワーク概論
-- **MACアドレス**は端末ごとの識別番号で、Wi-Fiの接続制御に利用される。ただし偽装できるため、セキュリティ的には弱点になる。  
-- **Ping**はICMPを使って相手に到達できるかを確認し、応答時間（遅延）を測定できる。ネットワークの状態を調べるのに役立つ。  
-
-**English**
-- A **MAC address** uniquely identifies a device and can be used for Wi-Fi access control. However, it can be spoofed, making it a weak security measure.  
-- **Ping** uses ICMP to check if a host is reachable and measures response time (latency). It is useful for checking network health.  
-
----
-
-### まだ分からないこと (Unclear Points)
-
-- Pingの応答時間を計測することは理解したが、それが具体的にセキュリティ分析にどう役立つのかはまだ理解できていない。  
-- MACアドレスの偽装が現実の攻撃でどのように使われるのか、もう少し実例を知りたい。  
-
-**English**
-- I understood that Ping measures response time, but I am still unsure how it is directly applied in security analysis.  
-- I want to learn more about how MAC address spoofing is used in real-world attacks.  
+## DoS Attack (Denial of Service attack)  
+- **Goal**: Make a service unavailable  
+- **Method**: Overload a server or network with excessive requests from a single source  
+- **Examples**:  
+  - SYN Flood: Exploits the TCP handshake  
+  - ICMP Flood (Ping Flood): Sends massive amounts of pings  
+  - Ping of Death: Sends oversized packets to crash the system  
 
 ---
 
-### 次のステップ (Next Steps)
+## ネットワークアナライザー / Network Analyzer  
+- Courseraで紹介されたのは **tcpdump**  
+- **tcpdump**: コマンドラインでパケットをキャプチャするツール  
+- **利用例**:  
+  ```bash
+  tcpdump -i eth0 port 80
 
-- Pingの結果がセキュリティの観点でどのように活用されるかを調べる。  
-- MACアドレス偽装の実例や対策について学ぶ。  
+## DDoS攻撃 (Distributed Denial of Service attack)  
+- **特徴**: 複数の攻撃元（ボットネット）を使うので、DoSより強力  
+- **仕組み**: 攻撃者が感染したデバイス群を遠隔操作して一斉に攻撃  
+- **事例**: 2016年の **Miraiボットネット攻撃**。IoT機器が悪用され、大規模なサービスが一時停止  
+- **観測例**: DDoSが疑われるときにトラフィックを調査するコマンド  
 
-**English**
-- Research how Ping results can be used in security analysis.  
-- Learn about real-world use cases of MAC address spoofing and possible countermeasures.
+```bash
+# 80番ポート（HTTP）のトラフィックを確認
+tcpdump -nn -i eth0 port 80
+
+# SYNパケットだけを確認（SYN Flood疑いのとき）
+tcpdump -nn -i eth0 'tcp[tcpflags] & tcp-syn != 0'
