@@ -42,3 +42,29 @@ To confirm the root cause, server-side checks would be required:
 - Date: 2025-9-11  
 - Author: Koki Suzuki
 - Lesson learned
+
+
+---
+
+## Reflection
+
+### What went well
+- Correctly identified that DNS queries were failing on UDP/53 and that ICMP error messages were generated.
+- Considered firewall blocking as a possible cause, showing awareness of common network security controls.
+- Successfully followed the incident report template and separated observed facts from analysis.
+
+### What could be improved
+- Misinterpreted "port unreachable" as "the packet never arrived" instead of "the packet arrived but the port was not available or was actively rejected."
+- Focused on a single cause (firewall) without considering other possibilities such as the DNS service being down or misconfigured.
+- Did not clearly outline the next investigative steps (e.g., checking DNS service status, firewall rules, or listening ports).
+
+### Lessons learned
+- Always distinguish between **observed facts** (from logs) and **possible causes** (analysis).
+- ICMP messages provide specific information that can narrow down the source of connectivity issues.
+- An incident report is stronger when it includes not just the cause but also **next steps for investigation**.
+
+### Next steps for myself
+- Practice interpreting other ICMP messages (e.g., *network unreachable*, *host unreachable*, *time exceeded*).
+- For future exercises, list at least two possible causes for any incident.
+- Improve my ability to think in English by summarizing findings in simple English sentences, even if my understanding is basic at first.
+
