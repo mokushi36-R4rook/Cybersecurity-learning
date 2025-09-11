@@ -1,41 +1,16 @@
-# #  今日の学び Coursera / Today’s Learning in coursera
+2025/09/11
+# 今日の学び / Today's Learning (Cybersecurity)
 
-## DoS攻撃 (Denial of Service attack)  
-- **目的**: サービスを利用不能にする  
-- **方法**: 単一の攻撃元から大量のリクエストやデータを送りつけ、サーバーやネットワークを過負荷にさせる  
-- **代表例**:  
-  - SYN Flood: TCP接続の初期ハンドシェイクを悪用  
-  - ICMP Flood (Ping Flood): pingを大量に送信  
-  - Ping of Death: 異常に大きなパケットでシステムをクラッシュさせる  
+## 学んだこと (Learned)
+- **DoS攻撃**: 大量のリクエストを送ってサービスを停止させる。代表例は SYN flood, ICMP flood, Ping of Death。
+- **DDoS攻撃**: DoS攻撃を複数の感染端末（ボットネット）から行うもの。より大規模で深刻。
+- **IPを利用した攻撃**: IP spoofing（送信元偽装）、MITM（中間者攻撃）、Replay attack（通信の再送）など。
+- **OSセキュリティ**: OSはハードウェアとソフトウェアの仲介役であり、セキュリティがなければ権限を奪われる可能性がある。
 
----
+## 理解が足りない点 (Gaps in Understanding)
+- SYN flood, ICMP flood, Ping of Death の詳細な仕組み。
+- ボットネットの制御方法（C2サーバなど）。
+- 各IP攻撃の違いと防御策。
+- OSセキュリティの具体例（ユーザー権限管理、パッチ適用、アクセス制御など）。
 
-## DoS Attack (Denial of Service attack)  
-- **Goal**: Make a service unavailable  
-- **Method**: Overload a server or network with excessive requests from a single source  
-- **Examples**:  
-  - SYN Flood: Exploits the TCP handshake  
-  - ICMP Flood (Ping Flood): Sends massive amounts of pings  
-  - Ping of Death: Sends oversized packets to crash the system  
 
----
-
-## ネットワークアナライザー / Network Analyzer  
-- Courseraで紹介されたのは **tcpdump**  
-- **tcpdump**: コマンドラインでパケットをキャプチャするツール  
-- **利用例**:  
-  ```bash
-  tcpdump -i eth0 port 80
-
-## DDoS攻撃 (Distributed Denial of Service attack)  
-- **特徴**: 複数の攻撃元（ボットネット）を使うので、DoSより強力  
-- **仕組み**: 攻撃者が感染したデバイス群を遠隔操作して一斉に攻撃  
-- **事例**: 2016年の **Miraiボットネット攻撃**。IoT機器が悪用され、大規模なサービスが一時停止  
-- **観測例**: DDoSが疑われるときにトラフィックを調査するコマンド  
-
-```bash
-# 80番ポート（HTTP）のトラフィックを確認
-tcpdump -nn -i eth0 port 80
-
-# SYNパケットだけを確認（SYN Flood疑いのとき）
-tcpdump -nn -i eth0 'tcp[tcpflags] & tcp-syn != 0'
