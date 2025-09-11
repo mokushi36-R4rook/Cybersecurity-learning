@@ -1,0 +1,44 @@
+# DNS Incident Report
+
+## Overview
+This report analyzes a connectivity issue encountered during a lab exercise.  
+Several users were unable to access the website **www.yummyrecipesforme.com** and received the error message:  
+`destination port unreachable`.  
+
+The goal of this report is to summarize the network traffic logs and provide possible causes for the incident.
+
+---
+
+## Part 1 — Summary of the problem
+Packet capture shows that DNS lookups to the resolver at **203.0.113.2** were sent via UDP but elicited ICMP responses indicating **"udp port 53 unreachable"**.  
+
+As a result, DNS queries for `www.yummyrecipesforme.com` failed, preventing the browser from retrieving the IP address and establishing an HTTPS connection to the server.
+
+---
+
+## Part 2 — Analysis and probable cause
+The ICMP error message indicates that UDP packets reached a device that reported no service listening on UDP port 53.  
+The most likely cause is that the **DNS service was not running or not bound to UDP/53** (for example, the DNS daemon was stopped or misconfigured).  
+
+An alternative possibility is that a **firewall or network device** actively rejected DNS requests to port 53 and sent ICMP Port Unreachable responses.  
+
+To confirm the root cause, server-side checks would be required:
+- Verify DNS service status and configuration  
+- Check listening ports (UDP/53)  
+- Review firewall or access control rules  
+- Run packet captures on the DNS server itself  
+
+---
+
+## Lessons Learned
+- ICMP “port unreachable” messages can originate from either a host with no service listening, or from a firewall actively rejecting packets.  
+- Analyzing both DNS and ICMP traffic together provides valuable insight into why higher-level protocols (such as HTTPS) fail.  
+- In incident reports, it is important to present both the **observed facts** (log evidence) and **possible causes** without over-speculation.
+
+---
+
+## Metadata
+- Exercise: Coursera Google Cybersecurity Certificate (Lab — Incident Analysis)  
+- Date: 2025-9-11  
+- Author: Koki Suzuki
+- Lesson learned
