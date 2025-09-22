@@ -1,48 +1,46 @@
-# 学習ログ / Learning Log
+## 学習ログ / Learning Log
 
-## ■ 日付（JST）/ Date  
-2025/09/21  
+■ 日付（JST）/ Date  
+2025/09/22  
 
-## ■ 学習テーマ / Topic  
-TryHackMe - DNS in detail  
+■ 学習テーマ / Topic  
+tryhackme  
+HTTP in detail  
 
-## ■ 目的 / Goal (JP→EN one-liner)  
-- JP: DNSの仕組みと主要なレコードについて理解する  
-- EN: Understand the mechanism of DNS and its main record types  
+■ 目的 / Goal (JP→EN one-liner)  
+JP: HTTPについて理解する  
+EN: To understand the basics of HTTP  
 
----
+■ 今日やったこと（一次メモ・JP中心）  
+- HTTP(HyperText Transfer Protocol)について学んだ  
+- サーバーとクライアント間での情報のやり取りの仕組みを確認した  
+- ヘッダーに条件や付随情報が含まれることを理解した  
+- レスポンスヘッダー `Content-Length` が「どれくらいのデータを受け取るか」を伝える役割を持つことを学んだ  
+- サーバー内部エラー時に `500 Internal Server Error` が返るケースを確認した  
+- PUT リクエストを作成する課題に挑戦したが、パラメータ指定を誤って `400 Bad Request` を返され、修正方法を理解した  
 
-## ■ 今日やったこと（一次メモ・JP中心）  
-- DNS (Domain Name System) とは何かを学んだ  
-- ドメインの構造（サブドメイン、gTLD、ccTLD）を整理した  
-- DNSレコードの種類（A, AAAA, CNAME, MX, TXT）を確認した  
-- DNSの問い合わせの流れ（Recursive, Authoritative, TTL）を学んだ  
-- `dig` コマンドでAレコードやTXTレコードを調べる演習をした  
+■ 参照した資料・リンク  
+- https://tryhackme.com/room/httpindetail  
 
----
+■ 自分の理解で怪しい所（要修正ポイント）  
+- 「HTTPとは何か？」をまだ自分の言葉でうまく説明できない  
+- 各メソッド（GET/POST/PUT/DELETE）の使い分けを整理しきれていない  
 
-## ■ 参照した資料・リンク  
-- [TryHackMe: DNS in detail](https://tryhackme.com/room/dnsindetail)  
+■ 反省と気づき  
+- 「username=admin」と明示されているのに、誤って `id=2` を送ってしまった  
+- 問題文が自明に思えても、英語表現やHTTPリクエスト形式に慣れていないと処理が止まる  
+- **反省点:**  
+  1. 英文を「ブロックごとに読み解く」習慣をつける  
+  2. HTTPリクエストの構造（ヘッダー／ボディ）をパターンとして覚える  
+  3. 課題文に出ているパラメータ名と値を正確に抜き出す練習を繰り返す  
+- **学び:** 今回のつまずきは、理解を定着させるための大きな一歩。次から同じミスをしない自信につながる  
 
----
+■ 英語の簡単要約（あれば下書き）  
+I studied HTTP basics, including request/response structure.  
+I learned about the `Content-Length` header and common error codes like `500`.  
+I practiced PUT requests and reflected on mistakes with parameters.  
 
-## ■ 自分の理解で怪しい所（要修正ポイント）  
-- 「TMX」レコードと書いたが、正しくは「TXT」レコード  
-- Recursive DNSとAuthoritative DNSの役割の違いを正確に説明できなかった  
-  - Recursive: ユーザーの代わりに問い合わせを繰り返すサーバー  
-  - Authoritative: ドメインの正しい情報を保持するサーバー  
-- TTLを単なる数値と理解していたが、正しくは「キャッシュが保持される時間」を意味し、ネットワーク効率に関わる  
+■ 成果物（コード/図/ノート）  
+例: 正しいPUTリクエストの例  
 
----
-
-## ■ 英語の簡単要約  
-Today I studied DNS in detail on TryHackMe.  
-I learned the structure of domains (gTLD, ccTLD), record types (A, AAAA, CNAME, MX, TXT), and the process of DNS resolution including recursive and authoritative servers.  
-I also practiced using the `dig` command to retrieve records and observed the role of TTL in caching.  
-
----
-
-## ■ 成果物（コード/図/ノート）  
-- 簡易図解：  
-bash
   dig TXT website.thm
