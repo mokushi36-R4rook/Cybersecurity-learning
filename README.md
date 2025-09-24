@@ -1,46 +1,66 @@
-## 学習ログ / Learning Log
+# 学習ログ / Study Log  
+**日付（JST）/ Date:** 2025/09/23
 
-■ 日付（JST）/ Date  
-2025/09/22  
+---
 
-■ 学習テーマ / Topic  
-tryhackme  
-HTTP in detail  
+## 学習テーマ / Topic  
+**tryhackme — How Websites Work**  
 
-■ 目的 / Goal (JP→EN one-liner)  
-JP: HTTPについて理解する  
-EN: To understand the basics of HTTP  
+---
 
-■ 今日やったこと（一次メモ・JP中心）  
-- HTTP(HyperText Transfer Protocol)について学んだ  
-- サーバーとクライアント間での情報のやり取りの仕組みを確認した  
-- ヘッダーに条件や付随情報が含まれることを理解した  
-- レスポンスヘッダー `Content-Length` が「どれくらいのデータを受け取るか」を伝える役割を持つことを学んだ  
-- サーバー内部エラー時に `500 Internal Server Error` が返るケースを確認した  
-- PUT リクエストを作成する課題に挑戦したが、パラメータ指定を誤って `400 Bad Request` を返され、修正方法を理解した  
+## 目的 / Goal (JP → EN one-liner)  
+**JP:** ウェブサイトの仕組み（ブラウザ・サーバ・プロトコル・レンダリングなど）の全体像を掴む  
+**EN:** Get a high-level understanding of how websites work (browser, server, protocols, rendering).
 
-■ 参照した資料・リンク  
-- https://tryhackme.com/room/httpindetail  
+---
 
-■ 自分の理解で怪しい所（要修正ポイント）  
-- 「HTTPとは何か？」をまだ自分の言葉でうまく説明できない  
-- 各メソッド（GET/POST/PUT/DELETE）の使い分けを整理しきれていない  
+## 今日やったこと（一次メモ）  
+- TryHackMe の “How Websites Work” を通して演習を実施。  
+- HTML や JavaScript といった技術要素が実際にページを動かしていることを確認。  
+- ただし、各要素同士（DNS → TCP → HTTP → TLS → ブラウザレンダリング → DOM → JS 実行）の関係性の理解が浅いと感じた。  
+- 現時点では「部分的に見えているが、全体像が結びついていない」ことを自覚。
 
-■ 反省と気づき  
-- 「username=admin」と明示されているのに、誤って `id=2` を送ってしまった  
-- 問題文が自明に思えても、英語表現やHTTPリクエスト形式に慣れていないと処理が止まる  
-- **反省点:**  
-  1. 英文を「ブロックごとに読み解く」習慣をつける  
-  2. HTTPリクエストの構造（ヘッダー／ボディ）をパターンとして覚える  
-  3. 課題文に出ているパラメータ名と値を正確に抜き出す練習を繰り返す  
-- **学び:** 今回のつまずきは、理解を定着させるための大きな一歩。次から同じミスをしない自信につながる  
+---
 
-■ 英語の簡単要約（あれば下書き）  
-I studied HTTP basics, including request/response structure.  
-I learned about the `Content-Length` header and common error codes like `500`.  
-I practiced PUT requests and reflected on mistakes with parameters.  
+## 自分の理解で怪しい所（要修正ポイント） — 指摘と正しい説明
+1. **ブラウザとサーバの役割**  
+   - 誤解: 「HTML / JS が動いている＝ウェブ全体を理解した」  
+   - 正しい説明: ブラウザはクライアント、サーバは応答側。ブラウザはリクエストを送り、サーバがHTMLやデータを返し、ブラウザが表示する。
 
-■ 成果物（コード/図/ノート）  
-例: 正しいPUTリクエストの例  
+2. **DNS と IP の関係**  
+   - 正しい説明: ドメイン名はDNSでIPに変換されてから接続が行われる。
 
-  dig TXT website.thm
+3. **TCP / HTTP / TLS の順序**  
+   - 正しい説明: DNS解決 → TCP接続 → TLSハンドシェイク（HTTPSの場合） → HTTPリクエスト/レスポンス。
+
+4. **レンダリングと DOM の違い**  
+   - 正しい説明: HTMLはDOMツリーに変換され、CSSでレンダリングされ、JavaScriptがDOMを動的に変更する。
+
+5. **JS の実行タイミング**  
+   - 正しい説明: 要素が存在する前にJSを実行するとエラーになる。`DOMContentLoaded` や `<script defer>` で回避。
+
+6. **セキュリティ（CORS / HTTPS の基礎）**  
+   - 正しい説明: 外部リソースは同一生成元ポリシーで制限される。HTTPSは暗号化と証明書検証を提供。
+
+---
+
+## 英語の簡単要約 / Short English Summary  
+I studied TryHackMe's "How Websites Work" room. I confirmed that HTML and JavaScript are pieces that make pages interactive, but I need to better connect concepts like DNS, TCP/TLS, HTTP, browser rendering (DOM/CSS), and JS execution timing to form a coherent mental model.
+
+---
+
+## 成果物（コード / 図 / ノート）  
+### 最小動作コード（DOM操作の例）
+```html
+<!DOCTYPE html>
+<html>
+  <head><meta charset="utf-8"><title>Demo</title></head>
+  <body>
+    <div id="demo">Hi there!</div>
+
+    <script>
+      document.getElementById('demo').textContent = 'Hack the Planet';
+    </script>
+  </body>
+</html>
+
