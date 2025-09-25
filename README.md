@@ -1,66 +1,61 @@
-# 学習ログ / Study Log  
-**日付（JST）/ Date:** 2025/09/23
+学習ログ / Study Log
+■ 日付（JST）/ Date
 
----
+2025/09/25
 
-## 学習テーマ / Topic  
-**tryhackme — How Websites Work**  
+■ 学習テーマ / Topic
 
----
+TryHackMe — Putting It All Together（Web全体の流れの統合理解）
 
-## 目的 / Goal (JP → EN one-liner)  
-**JP:** ウェブサイトの仕組み（ブラウザ・サーバ・プロトコル・レンダリングなど）の全体像を掴む  
-**EN:** Get a high-level understanding of how websites work (browser, server, protocols, rendering).
+■ 目的 / Goal (JP→EN one-liner)
 
----
+JP: Web通信の全体像をつかみ、主要コンポーネントの役割を自分の言葉で説明できるようにする。
 
-## 今日やったこと（一次メモ）  
-- TryHackMe の “How Websites Work” を通して演習を実施。  
-- HTML や JavaScript といった技術要素が実際にページを動かしていることを確認。  
-- ただし、各要素同士（DNS → TCP → HTTP → TLS → ブラウザレンダリング → DOM → JS 実行）の関係性の理解が浅いと感じた。  
-- 現時点では「部分的に見えているが、全体像が結びついていない」ことを自覚。
+EN: Learn how the individual components of the web work together to deliver your favorite websites, and be able to explain each role clearly.
 
----
+■ 今日やったこと（一次メモ・JP中心）
 
-## 自分の理解で怪しい所（要修正ポイント） — 指摘と正しい説明
-1. **ブラウザとサーバの役割**  
-   - 誤解: 「HTML / JS が動いている＝ウェブ全体を理解した」  
-   - 正しい説明: ブラウザはクライアント、サーバは応答側。ブラウザはリクエストを送り、サーバがHTMLやデータを返し、ブラウザが表示する。
+クライアント→サーバの一連の流れを概観：DNS解決 → TCP(3WHS) → TLS(SNI/証明書検証) → HTTP要求/応答。
 
-2. **DNS と IP の関係**  
-   - 正しい説明: ドメイン名はDNSでIPに変換されてから接続が行われる。
+経路上の装置と役割：CDN（配信/キャッシュ）、リバースプロキシ、WAF（L7防御）、ネットワーク/ホストFW。
 
-3. **TCP / HTTP / TLS の順序**  
-   - 正しい説明: DNS解決 → TCP接続 → TLSハンドシェイク（HTTPSの場合） → HTTPリクエスト/レスポンス。
+アプリ側：仮想ホスト（Hostヘッダ/SNI）、静的/動的コンテンツ、バックエンド（DB/キャッシュ）連携。
 
-4. **レンダリングと DOM の違い**  
-   - 正しい説明: HTMLはDOMツリーに変換され、CSSでレンダリングされ、JavaScriptがDOMを動的に変更する。
+自覚：各段階のつながりと**配置（どこにあるか）**が曖昧。
 
-5. **JS の実行タイミング**  
-   - 正しい説明: 要素が存在する前にJSを実行するとエラーになる。`DOMContentLoaded` や `<script defer>` で回避。
+■ 参照した資料・リンク
 
-6. **セキュリティ（CORS / HTTPS の基礎）**  
-   - 正しい説明: 外部リソースは同一生成元ポリシーで制限される。HTTPSは暗号化と証明書検証を提供。
+TryHackMe: Putting It All Together（学習ルーム）
 
----
+コマンド例：dig, nslookup, traceroute/tracert, curl -I, openssl s_client -connect host:443 -servername host
 
-## 英語の簡単要約 / Short English Summary  
-I studied TryHackMe's "How Websites Work" room. I confirmed that HTML and JavaScript are pieces that make pages interactive, but I need to better connect concepts like DNS, TCP/TLS, HTTP, browser rendering (DOM/CSS), and JS execution timing to form a coherent mental model.
+■ 自分の理解で怪しい所（要修正ポイント）
 
----
+誤記：「IP adress」→ IP address。
 
-## 成果物（コード / 図 / ノート）  
-### 最小動作コード（DOM操作の例）
-```html
-<!DOCTYPE html>
-<html>
-  <head><meta charset="utf-8"><title>Demo</title></head>
-  <body>
-    <div id="demo">Hi there!</div>
+順序の固定観念：DNS→FW→ポートの“固定順序”ではない。FW/WAF/CDN/Proxyは複層に存在し得る。
 
-    <script>
-      document.getElementById('demo').textContent = 'Hack the Planet';
-    </script>
-  </body>
-</html>
+Virtual Hosts：HTTPはHostヘッダで、TLSはSNIでドメイン識別。
+
+CDN vs WAF：CDN=配信最適化/キャッシュ、WAF=L7で攻撃検知/遮断。
+
+静的/動的：生成方法とキャッシュ適性が主な違い（動的はキャッシュ戦略が重要）。
+
+■ 正しい説明（ショートメモ）
+
+標準フロー：URL入力 → DNS解決 → TCP 3WHS →（HTTPSなら）TLS → HTTP要求 →（CDN/WAF/Reverse Proxy通過）→ アプリ → 応答 → キャッシュ。
+
+ポート：80(HTTP)/443(HTTPS)など。OSが該当ポートで待機中のプロセス（nginx等）へ渡す。
+
+WAF：L7でHTTPペイロードを解析（SQLi/XSS対策）。L3/4中心のFWとは別役割。
+
+CDN：エッジから配布し遅延/負荷を低減。静的資産に強いが動的も一部対応可。
+
+■ 英語の簡単要約（2–3文）
+
+I reviewed the end-to-end web flow: DNS resolution, TCP/TLS handshakes, and HTTP over ports like 80/443. I clarified roles of CDN (delivery/caching) and WAF (L7 protection), and how virtual hosts use the Host header and TLS SNI. I still need hands-on practice to connect these steps confidently.
+
+■ 成果物（コード/図/ノート）
+
+簡易フロー図とコマンド実行計画のノートを作成（次回は実行結果を貼付）。
 
