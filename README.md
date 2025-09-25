@@ -55,7 +55,4 @@ CDN：エッジから配布し遅延/負荷を低減。静的資産に強いが�
 
 I reviewed the end-to-end web flow: DNS resolution, TCP/TLS handshakes, and HTTP over ports like 80/443. I clarified roles of CDN (delivery/caching) and WAF (L7 protection), and how virtual hosts use the Host header and TLS SNI. I still need hands-on practice to connect these steps confidently.
 
-■ 成果物（コード/図/ノート）
-
-簡易フロー図とコマンド実行計画のノートを作成（次回は実行結果を貼付）。
 
