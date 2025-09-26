@@ -1,58 +1,55 @@
-学習ログ / Study Log
-■ 日付（JST）/ Date
+# 学習ログ / Learning Log
 
-2025/09/25
+## 日付 / Date
+2025/09/26 (JST)
 
-■ 学習テーマ / Topic
+## 学習テーマ / Topic
+TryHackMe – Linux Fundamentals (Part 1)
 
-TryHackMe — Putting It All Together（Web全体の流れの統合理解）
+## 目的 / Goal (JP→EN one-liner)
+- JP: Linuxの基本操作とファイル操作の考え方を身につける  
+- EN: Build foundational fluency with Linux shell and file operations.
 
-■ 目的 / Goal (JP→EN one-liner)
+---
 
-JP: Web通信の全体像をつかみ、主要コンポーネントの役割を自分の言葉で説明できるようにする。
+## 今日やったこと（一次メモ）/ What I did (notes)
+- 基本コマンド：`pwd`, `ls`, `cd`, `touch`, `mkdir`, `mv`, `cp`, `rm`, `cat`, `file`
+- 出力と改行：`echo` の挙動、`echo -n` と `printf` の違い
+- 標準入出力の基礎：`>`, `>>`, `2>`, `2>/dev/null` の使い分け
+- 検索：`find . -maxdepth N -type f -name 'pattern'`、`-iname`、グロブと正規表現の違い
+- ファイルの中身確認：`cat`, `less`, `head`, `tail`
+- “human-readable” 表示フラグ：`-h`（例：`ls -lh`, `du -h`, `df -h`）
 
-EN: Learn how the individual components of the web work together to deliver your favorite websites, and be able to explain each role clearly.
+---
 
-■ 今日やったこと（一次メモ・JP中心）
+## 参照した資料・リンク / References
+- TryHackMe: Linux Fundamentals Part 1  
+  https://tryhackme.com/room/linuxfundamentalspart1
 
-クライアント→サーバの一連の流れを概観：DNS解決 → TCP(3WHS) → TLS(SNI/証明書検証) → HTTP要求/応答。
+---
 
-経路上の装置と役割：CDN（配信/キャッシュ）、リバースプロキシ、WAF（L7防御）、ネットワーク/ホストFW。
+## 自分の理解で怪しい所（要修正ポイント）/ Unclear points & fixes
 
-アプリ側：仮想ホスト（Hostヘッダ/SNI）、静的/動的コンテンツ、バックエンド（DB/キャッシュ）連携。
+1) **`echo` が改行を付ける → 文字数ズレ**  
+- 誤：`echo TryHackMe` は 末尾に改行が付くため厳密一致問題でズレることがある  
+- 正：改行なしは `echo -n TryHackMe` または `printf "TryHackMe"`
 
-自覚：各段階のつながりと**配置（どこにあるか）**が曖昧。
+2) **stderr リダイレクトの綴り**  
+- 誤：`2>dev/null`（スラッシュなし）  
+- 正：`2>/dev/null`（先頭 `/` 必須）  
+  例：`find . -maxdepth 3 -type f -name 'myfile' 2>/dev/null`
 
-■ 参照した資料・リンク
+3) **`cat` の対象は“ファイル”であって“ディレクトリ”ではない**  
+- 誤：`cat myfolder`  
+- 正：`cat myfolder/myfile`（ディレクトリ/ファイルの区別を意識）
 
-TryHackMe: Putting It All Together（学習ルーム）
+4) **ユーザー/ホームの取り違え**  
+- プロンプトが `root@...:~#` のとき、ホームは `/root`。  
+  THMの想定ファイルが `/home/tryhackme` にあるなら、`cd /home/tryhackme` してから探索する。
 
-コマンド例：dig, nslookup, traceroute/tracert, curl -I, openssl s_client -connect host:443 -servername host
-
-■ 自分の理解で怪しい所（要修正ポイント）
-
-誤記：「IP adress」→ IP address。
-
-順序の固定観念：DNS→FW→ポートの“固定順序”ではない。FW/WAF/CDN/Proxyは複層に存在し得る。
-
-Virtual Hosts：HTTPはHostヘッダで、TLSはSNIでドメイン識別。
-
-CDN vs WAF：CDN=配信最適化/キャッシュ、WAF=L7で攻撃検知/遮断。
-
-静的/動的：生成方法とキャッシュ適性が主な違い（動的はキャッシュ戦略が重要）。
-
-■ 正しい説明（ショートメモ）
-
-標準フロー：URL入力 → DNS解決 → TCP 3WHS →（HTTPSなら）TLS → HTTP要求 →（CDN/WAF/Reverse Proxy通過）→ アプリ → 応答 → キャッシュ。
-
-ポート：80(HTTP)/443(HTTPS)など。OSが該当ポートで待機中のプロセス（nginx等）へ渡す。
-
-WAF：L7でHTTPペイロードを解析（SQLi/XSS対策）。L3/4中心のFWとは別役割。
-
-CDN：エッジから配布し遅延/負荷を低減。静的資産に強いが動的も一部対応可。
-
-■ 英語の簡単要約（2–3文）
-
-I reviewed the end-to-end web flow: DNS resolution, TCP/TLS handshakes, and HTTP over ports like 80/443. I clarified roles of CDN (delivery/caching) and WAF (L7 protection), and how virtual hosts use the Host header and TLS SNI. I still need hands-on practice to connect these steps confidently.
-
-
+5) **`find` の条件結合（`-o` を使うときの括弧）**  
+- `-o`（OR）を使う際は、括弧でグルーピングして **`-maxdepth` の適用範囲**を明示すると混乱がない。  
+  例：  
+  ```bash
+  # 両方の -name に同じ深さ制限を掛けたい:
+  find . -maxdepth 3 -type f \( -name 'myfile' -o -name 'myfile*' \) 2>/dev/null
